@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Teacher</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header><h1>Teacher Dashboard</h1><a href="login.html" id="logout">Logout</a></header>
+  <main>
+    <section class="card">
+      <h2>Your Appointments</h2>
+      <ul id="teacherAppointments"></ul>
+    </section>
+    <section class="card">
+      <h2>Messages</h2>
+      <ul id="messages"></ul>
+    </section>
+  </main>
+  <script src="js/firebaseConfig.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/db.js"></script>
+  <script>
+    firebase.auth().onAuthStateChanged(async user=>{
+      if(!user) return location.href='login.html';
+      const profile = await getUserProfile(user.uid);
+      if(profile.role!=='teacher') { alert('Not a teacher'); firebase.auth().signOut(); location.href='login.html'; return; }
+      loadTeacherAppointments(user.uid);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Admin</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header><h1>Admin Dashboard</h1><a href="login.html">Logout</a></header>
+  <main>
+    <section id="teacherMgmt" class="card">
+      <h2>Manage Teachers</h2>
+      <form id="addTeacherForm">
+        <input id="tname" placeholder="Name" required />
+        <input id="tdept" placeholder="Department" />
+        <input id="tsub" placeholder="Subject" />
+        <button>Add Teacher</button>
+      </form>
+      <ul id="teachersList"></ul>
+    </section>
+    <section id="studentApprovals" class="card">
+      <h2>Pending Students</h2>
+      <ul id="pendingStudents"></ul>
+    </section>
+    <section class="card">
+      <h2>All Appointments</h2>
+      <ul id="allAppointments"></ul>
+    </section>
+  </main>
+  <script src="js/firebaseConfig.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Register - Student</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <main class="card">
+    <h2>Register (Student)</h2>
+    <form id="registerForm">
+      <label>Name <input id="name" required /></label>
+      <label>Email <input id="email" type="email" required /></label>
+      <label>Password <input id="password" type="password" required /></label>
+      <label>Department <input id="dept" /></label>
+      <button type="submit">Register</button>
+    </form>
+    <p>Already have account? <a href="login.html">Login</a></p>
+  </main>
+  <script src="js/firebaseConfig.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const dept = document.getElementById('dept').value;
+      try {
+        await registerStudent({name, email, password, dept});
+        alert('Registered. Wait for admin approval.');
+        window.location.href = 'login.html';
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+  </script>
+</body>
+</html>

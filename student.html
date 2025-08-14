@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Student</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header><h1>Student Dashboard</h1><a href="login.html" id="logout">Logout</a></header>
+  <main>
+    <section class="card">
+      <h2>Search Teachers</h2>
+      <input id="search" placeholder="Search by name/subject" />
+      <ul id="searchResults"></ul>
+    </section>
+    <section class="card">
+      <h2>Your Appointments</h2>
+      <ul id="myAppointments"></ul>
+    </section>
+  </main>
+  <script src="js/firebaseConfig.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/db.js"></script>
+  <script>
+    // Simple student interactions
+    firebase.auth().onAuthStateChanged(async user => {
+      if(!user) { location.href='login.html'; return; }
+      const profile = await getUserProfile(user.uid);
+      if(!profile || profile.role !== 'student' || !profile.approved) {
+        alert('Account not approved or not a student.');
+        firebase.auth().signOut();
+        location.href='login.html';
+        return;
+      }
+      loadMyAppointments(user.uid);
+      document.getElementById('search').addEventListener('input', async (e)=>{
+        const q = e.target.value.trim();
+        const res = await searchTeachers(q);
+        const ul = document.getElementById('searchResults'); ul.innerHTML='';
+        res.forEach(t=>{
+          const li = document.createElement('li');
+          li.textContent = t.name + ' - ' + t.subject + ' ('+t.dept+')';
+          const btn = document.createElement('button'); btn.textContent='Book';
+          btn.onclick = ()=> {
+            const dt = prompt('Enter appointment date/time (e.g. 2025-08-20 15:00)');
+            if(dt) bookAppointment({studentUid:user.uid, teacherUid:t.uid, datetime:dt});
+          };
+          li.appendChild(btn); ul.appendChild(li);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
